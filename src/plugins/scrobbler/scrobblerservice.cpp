@@ -18,7 +18,7 @@
  */
 
 #include "scrobblerservice.h"
-
+//#include "scrobblerfilter.h"
 #include "scrobblerauthsession.h"
 #include "scrobblersettings.h"
 
@@ -152,7 +152,7 @@ void ScrobblerService::updateNowPlaying(const Track& track)
         return;
     }
 
-    if(!isAuthenticated() || !canBeScrobbled(track)) {
+    if(!isAuthenticated() || !canBeScrobbled(track)) {// || excludedByFilter(track)) {
         return;
     }
 
@@ -172,6 +172,10 @@ void ScrobblerService::scrobble(const Track& track)
     if(track.id() != m_currentTrack.id() || track.uniqueFilepath() != m_currentTrack.uniqueFilepath()) {
         return;
     }
+
+    /*if(excludedByFilter(track)) {
+		return;
+	}*/
 
     setScrobbled(true);
     cache()->add(track, m_timestamp);
